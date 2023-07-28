@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Objects;
 
-@Entity
+@Entity(name = "student")
 public class Student {
 
     @Id
@@ -13,6 +13,17 @@ public class Student {
     private Long id;
     private String name;
     private int age;
+
+    public Student(Long id, String name, int age) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+
+    public Student() {
+
+    }
+
 
     @Override
     public String toString() {
