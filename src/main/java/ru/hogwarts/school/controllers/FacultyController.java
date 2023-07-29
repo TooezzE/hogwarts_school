@@ -21,14 +21,11 @@ public class FacultyController {
     @GetMapping()
     public ResponseEntity<Faculty> getFacultyInfo(@RequestParam(required = false) Long id,
                                   @RequestParam(required = false) String name) {
-        Faculty faculty = null;
-        if(id != null) {
-            faculty = facultyService.getFaculty(id);
-            return ResponseEntity.ok(faculty);
+        if(id != null && facultyService.getFaculty(id).isPresent()) {
+            return ResponseEntity.ok(facultyService.getFaculty(id).get());
         }
         if(name != null && !name.isBlank()) {
-            faculty = facultyService.getFacultyByName(name);
-            return ResponseEntity.ok(faculty);
+            return ResponseEntity.ok(facultyService.getFacultyByName(name));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
