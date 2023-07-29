@@ -19,11 +19,10 @@ public class StudentController {
 
     @GetMapping("{id}")
     public ResponseEntity<Student> getStudentInfo(@PathVariable long id) {
-        Student student = studentService.getStudent(id);
-        if(student == null) {
+        if(studentService.getStudent(id).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(student);
+        return ResponseEntity.ok(studentService.getStudent(id).get());
     }
 
     @PostMapping
@@ -51,10 +50,16 @@ public class StudentController {
         return studentService.getAllStudents();
     }
 
-   // @GetMapping("/filtered/{age}")
-    //public Collection<Student> getAllOfAge(@PathVariable int age) {
-      //  return studentService.getStudentsOfAge(age);
-    //}
+    @GetMapping("{age}")
+    public Collection<Student> getAllOfAge(@PathVariable int age) {
+        return studentService.getStudentsOfAge(age);
+    }
+
+    @GetMapping
+    public Collection<Student> getStudentsByAgeBetween(@RequestParam(required = false) Integer min,
+                                                       @RequestParam(required = false) Integer max) {
+        return studentService.getStudentsByAgeBetween(min, max);
+    }
 }
 
 
