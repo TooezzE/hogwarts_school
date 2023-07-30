@@ -9,7 +9,7 @@ import ru.hogwarts.school.services.StudentService;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("student")
+@RequestMapping("/student")
 public class StudentController {
     private final StudentService studentService;
 
@@ -17,12 +17,12 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Student> getStudentInfo(@PathVariable long id) {
-        if(studentService.getStudent(id).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    @GetMapping("/{id}")
+    public ResponseEntity<Student> getStudentInfo(@PathVariable Long id) {
+        if(id == null && studentService.getStudent(id) == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return ResponseEntity.ok(studentService.getStudent(id).get());
+        return ResponseEntity.ok(studentService.getStudent(id));
     }
 
     @PostMapping
@@ -30,19 +30,15 @@ public class StudentController {
         return studentService.createStudent(student);
     }
 
-    @PutMapping
-    public ResponseEntity<Student> editStudent(@RequestBody Student student) {
-        Student student1 = studentService.editStudent(student);
-        if(student1 == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        return ResponseEntity.ok(student);
+    @PutMapping("/{id}")
+    public Student editStudent(@PathVariable Long id,
+                                               @RequestBody Student student) {
+        return studentService.editStudent(id, student);
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Student> deleteStudent(@PathVariable long id) {
-        studentService.deleteStudent(id);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/{id}")
+    public Student deleteStudent(@PathVariable Long id) {
+        return studentService.deleteStudent(id);
     }
 
     @GetMapping("/all")
@@ -50,15 +46,20 @@ public class StudentController {
         return studentService.getAllStudents();
     }
 
-    @GetMapping("{age}")
+    @GetMapping("/by-age/{age}")
     public Collection<Student> getAllOfAge(@PathVariable int age) {
         return studentService.getStudentsOfAge(age);
     }
 
-    @GetMapping
+    @GetMapping("/age-between")
     public Collection<Student> getStudentsByAgeBetween(@RequestParam(required = false) Integer min,
                                                        @RequestParam(required = false) Integer max) {
         return studentService.getStudentsByAgeBetween(min, max);
+    }
+
+    @GetMapping("/of-faculty")
+    public Collection<Student> getStudentsOfFaculty(@RequestParam Long facultyId) {
+        return studentService.getStudentsOfFaculty(facultyId);
     }
 }
 
