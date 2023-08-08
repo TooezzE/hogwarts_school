@@ -12,10 +12,8 @@ import javax.transaction.Transactional;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.IdentityHashMap;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 

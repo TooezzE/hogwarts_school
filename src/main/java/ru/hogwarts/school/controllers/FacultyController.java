@@ -20,7 +20,7 @@ public class FacultyController {
 
     @GetMapping("/{id}/{name}")
     public ResponseEntity<Faculty> getFacultyInfo(@PathVariable(required = false) Long id,
-                                  @PathVariable(required = false) String name) {
+                                                  @PathVariable(required = false) String name) {
         if(id != null && facultyService.getFaculty(id) != null) {
             return ResponseEntity.ok(facultyService.getFaculty(id));
         }
@@ -46,7 +46,7 @@ public class FacultyController {
         return facultyService.deleteFaculty(id);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public Collection<Faculty> getAll() {
         return facultyService.getAll();
     }
