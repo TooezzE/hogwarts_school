@@ -65,8 +65,6 @@ public class StudentService {
     }
 
     public Collection<Student> getStudentsOfFaculty(Long facultyId) {
-        return facultyRepository.findById(facultyId)
-                .map(Faculty::getStudents)
-                .orElseThrow(FacultyNotFoundException::new);
+        return facultyRepository.getStudentsOfFaculty(facultyId);
     }
 }

@@ -51,13 +51,13 @@ public class FacultyController {
         return facultyService.getAll();
     }
 
-    @GetMapping("/filtered")
-    public Collection<Faculty> getAllByColor(@RequestParam String color) {
+    @GetMapping("/filtered/{color}")
+    public Collection<Faculty> getAllByColor(@PathVariable String color) {
         return facultyService.getFacultiesOfColor(color);
     }
 
-    @GetMapping("/get-by-student")
-    public Faculty getFacultyByStudent(@RequestParam Long studentId) {
+    @GetMapping("/get-by-student/{studentId}")
+    public Faculty getFacultyByStudent(@PathVariable Long studentId) {
         return facultyService.getFacultyByStudentId(studentId);
     }
 }
