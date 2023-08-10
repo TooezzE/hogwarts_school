@@ -357,7 +357,7 @@ public class StudentControllerWebMvcTest {
 
         List<Student> students12 = Arrays.asList(student, student2);
 
-        when(facultyRepository.getStudentsOfFaculty(1L)).thenReturn(students12);
+        when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/student/of-faculty/" + faculty.getId())

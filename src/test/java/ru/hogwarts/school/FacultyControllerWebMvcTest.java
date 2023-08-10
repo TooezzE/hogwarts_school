@@ -315,7 +315,7 @@ public class FacultyControllerWebMvcTest {
 
         student.setFaculty(faculty);
 
-        when(facultyRepository.findFacultyByStudentId(1L)).thenReturn(faculty);
+        when(studentsRepository.findById(1L)).thenReturn(Optional.of(student));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/faculty/filtered/" + color)
