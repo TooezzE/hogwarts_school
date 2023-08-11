@@ -88,8 +88,14 @@ class FacultyControllerTest {
     @Test
     public void getAllFacultiesByColorTest() throws Exception {
         String color = "blue";
+        Faculty faculty = new Faculty(3L, "sss", color);
+        Faculty faculty1 = new Faculty(4L, "mmm", color);
+
+        this.testRestTemplate.postForObject("http://localhost:" + port + "/faculty/", faculty, Faculty.class);
+        this.testRestTemplate.postForObject("http://localhost:" + port + "/faculty/", faculty1, Faculty.class);
+
         assertThat(this.testRestTemplate.getForObject(
-                "http://localhost:" + port + "/faculty/filtered?color=" + color, String.class))
+                "http://localhost:" + port + "/faculty/filtered/" + color, String.class))
                 .containsIgnoringCase("\"color\":\"blue\"");
     }
 

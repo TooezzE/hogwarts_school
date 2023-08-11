@@ -90,7 +90,7 @@ class StudentControllerTest {
         int min = 25;
         int max = 30;
         assertThat(this.testRestTemplate.getForObject(
-                "http://localhost:" + port + "/student/age-between?min=" + min + "&max=" + max, String.class))
+                "http://localhost:" + port + "/student/age-between/" + min + "/" + max, String.class))
                 .containsAnyOf("\"age\":25", "\"age\":26", "\"age\":27", "\"age\":28", "\"age\":29", "\"age\":30");
     }
 
@@ -98,7 +98,7 @@ class StudentControllerTest {
     public void getStudentsOfFacultyTest() throws Exception {
         long facultyId = 1;
         assertThat(this.testRestTemplate.getForObject(
-                "http://localhost:" + port + "/student/of-faculty?facultyId=" + facultyId, String.class))
+                "http://localhost:" + port + "/student/of-faculty/" + facultyId, String.class))
                 .containsIgnoringCase("faculty\":{\"id\":1,");
     }
 
