@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import ru.hogwarts.school.controllers.FacultyController;
+import ru.hogwarts.school.exceptions.FacultyNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
@@ -75,12 +76,13 @@ class FacultyControllerTest {
         faculty.setColor("white");
         faculty.setId(10L);
 
-        assertThat(this.testRestTemplate.postForObject("http://localhost:" + port, faculty, String.class))
-                .isNotNull();
-        long id = faculty.getId();
+        Faculty actual = this.testRestTemplate.postForObject("http://localhost:" + port + "/faculty/", faculty, Faculty.class);
+        assertThat(actual).isNotNull();
+
+        long id = actual.getId();
         this.testRestTemplate.delete("http://localhost:" + port + "/faculty/" + id);
         assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/faculty/" + id, String.class))
-                .isNull();
+                .contains("\"status\":405");
     }
 
     @Test

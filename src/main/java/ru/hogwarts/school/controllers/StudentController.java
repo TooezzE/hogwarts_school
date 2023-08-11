@@ -20,7 +20,7 @@ public class StudentController {
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentInfo(@PathVariable Long id) {
         if(id == null && studentService.getStudent(id) == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(studentService.getStudent(id));
     }
