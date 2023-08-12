@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import ru.hogwarts.school.controllers.StudentController;
-import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
@@ -75,7 +74,7 @@ class StudentControllerTest {
         long id = actual.getId();
         this.testRestTemplate.delete("http://localhost:" + port + "/student/" + id);
         assertThat(this.testRestTemplate.getForObject("http://localhost:" + port + "/student/" + id, String.class))
-                .contains("\"status\":405");
+                .contains("\"status\":404");
     }
 
     @Test

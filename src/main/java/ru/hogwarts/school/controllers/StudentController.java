@@ -51,9 +51,9 @@ public class StudentController {
         return studentService.getStudentsOfAge(age);
     }
 
-    @GetMapping("/age-between/{min}/{max}")
-    public Collection<Student> getStudentsByAgeBetween(@PathVariable(required = false) Integer min,
-                                                       @PathVariable(required = false) Integer max) {
+    @GetMapping("/age-between")
+    public Collection<Student> getStudentsByAgeBetween(@RequestParam(required = false) Integer min,
+                                                       @RequestParam(required = false) Integer max) {
         return studentService.getStudentsByAgeBetween(min, max);
     }
 

@@ -276,51 +276,23 @@ public class FacultyControllerWebMvcTest {
 
     @Test
     public void getFacultyByStudentTest() throws Exception {
-        final String name = "aaa", name2 = "bbb", name3 = "ccc";
-        final String color = "red", color2 = "green", color3 = "blue";
-        final long id = 1, id2 = 2, id3 = 3;
+        final String name = "aaa";
+        final String color = "red";
+        final long id = 1;
 
         final Student student = new Student(1L, "Oleg", 23);
-
-        JSONObject facultyObject = new JSONObject();
-        facultyObject.put("name", name);
-        facultyObject.put("color", color);
-        facultyObject.put("id", id);
 
         Faculty faculty = new Faculty();
         faculty.setId(id);
         faculty.setName(name);
         faculty.setColor(color);
 
-
-        JSONObject facultyObject2 = new JSONObject();
-        facultyObject2.put("name", name2);
-        facultyObject2.put("color", color2);
-        facultyObject.put("id", id2);
-
-        Faculty faculty2 = new Faculty();
-        faculty2.setId(id2);
-        faculty2.setName(name2);
-        faculty2.setColor(color2);
-
-        JSONObject facultyObject3 = new JSONObject();
-        facultyObject3.put("name", name3);
-        facultyObject3.put("color", color3);
-        facultyObject.put("id", id3);
-
-        Faculty faculty3 = new Faculty();
-        faculty3.setId(id3);
-        faculty3.setName(name3);
-        faculty3.setColor(color3);
-
         student.setFaculty(faculty);
 
         when(studentsRepository.findById(1L)).thenReturn(Optional.of(student));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/faculty/filtered/" + color)
-                        .content(facultyObject.toString())
-                        .content(facultyObject3.toString())
+                        .get("/faculty/get-by-student/" + student.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

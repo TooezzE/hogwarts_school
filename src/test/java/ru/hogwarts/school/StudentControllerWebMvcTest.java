@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -273,31 +274,14 @@ public class StudentControllerWebMvcTest {
 
     @Test
     public void getStudentsOfAgeBetweenTest() throws Exception {
-        final String name = "Oleg", name2 = "Vlad", name3 = "Egor";
-        final int age = 21, age2 = 23, age3 = 29;
-        final long id = 1, id2 = 2, id3 = 3;
-
-        JSONObject studentObject = new JSONObject();
-        studentObject.put("name", name);
-        studentObject.put("age",  age);
-
-        Student student = new Student();
-        student.setId(id);
-        student.setName(name);
-        student.setAge(age);
-
-        JSONObject studentObject2 = new JSONObject();
-        studentObject2.put("name", name2);
-        studentObject2.put("age",  age2);
+        final String name2 = "Vlad", name3 = "Egor";
+        final int age2 = 23, age3 = 29;
+        final long id2 = 2, id3 = 3;
 
         Student student2 = new Student();
         student2.setId(id2);
         student2.setName(name2);
         student2.setAge(age2);
-
-        JSONObject studentObject3 = new JSONObject();
-        studentObject3.put("name", name3);
-        studentObject3.put("age",  age3);
 
         Student student3 = new Student();
         student3.setId(id3);
@@ -309,26 +293,22 @@ public class StudentControllerWebMvcTest {
         when(studentsRepository.getStudentsByAgeBetween(22, 30)).thenReturn(students23);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/student/age-between/" + age2 + "/" + age3)
-                        .content(studentObject2.toString())
-                        .content(studentObject3.toString())
+                        .get("/student/age-between?min=22&max=30")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(students23)));
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(2))
+                .andExpect(jsonPath("$[1].id").value(3));
     }
 
     @Test
     public void getStudentsOfFacultyTest() throws Exception {
-        final String name = "Oleg", name2 = "Vlad", name3 = "Egor";
-        final int age = 21, age2 = 29, age3 = 23;
-        final long id = 1, id2 = 2, id3 = 3;
+        final String name = "Oleg", name2 = "Vlad";
+        final int age = 21, age2 = 29;
+        final long id = 1, id2 = 2;
 
         final Faculty faculty = new Faculty(1L, "aaa", "red");
-
-        JSONObject studentObject = new JSONObject();
-        studentObject.put("name", name);
-        studentObject.put("age",  age);
 
         Student student = new Student();
         student.setId(id);
@@ -336,36 +316,21 @@ public class StudentControllerWebMvcTest {
         student.setAge(age);
         student.setFaculty(faculty);
 
-        JSONObject studentObject2 = new JSONObject();
-        studentObject2.put("name", name2);
-        studentObject2.put("age",  age2);
-
         Student student2 = new Student();
         student2.setId(id2);
         student2.setName(name2);
         student2.setAge(age2);
         student2.setFaculty(faculty);
 
-        JSONObject studentObject3 = new JSONObject();
-        studentObject3.put("name", name3);
-        studentObject3.put("age",  age3);
-
-        Student student3 = new Student();
-        student3.setId(id3);
-        student3.setName(name3);
-        student3.setAge(age3);
-
-        List<Student> students12 = Arrays.asList(student, student2);
-
         when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/student/of-faculty/" + faculty.getId())
-                        .content(studentObject.toString())
-                        .content(studentObject2.toString())
+                        .get("/student/of-faculty/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(students12)));
+                        .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].name").value("Oleg"))
+                .andExpect(jsonPath("$[1].name").value("Vlad"));
     }
 }
