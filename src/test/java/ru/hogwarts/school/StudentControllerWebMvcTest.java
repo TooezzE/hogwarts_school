@@ -310,17 +310,12 @@ public class StudentControllerWebMvcTest {
 
         final Faculty faculty = new Faculty(1L, "aaa", "red");
 
-        Student student = new Student();
-        student.setId(id);
-        student.setName(name);
-        student.setAge(age);
-        student.setFaculty(faculty);
+        List<Student> facultyStudents = Arrays.asList(
+                new Student(id, name, age),
+                new Student(id2, name2, age2)
+        );
 
-        Student student2 = new Student();
-        student2.setId(id2);
-        student2.setName(name2);
-        student2.setAge(age2);
-        student2.setFaculty(faculty);
+        faculty.setStudents(facultyStudents);
 
         when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
 
