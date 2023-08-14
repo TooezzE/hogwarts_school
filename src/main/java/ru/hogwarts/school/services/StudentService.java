@@ -2,66 +2,77 @@ package ru.hogwarts.school.services;
 
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exceptions.AgeLessThanZeroException;
-import ru.hogwarts.school.exceptions.FacultyNotFoundException;
 import ru.hogwarts.school.exceptions.StudentNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.FacultyRepository;
-import ru.hogwarts.school.repositories.StudentsRepository;
+import ru.hogwarts.school.repositories.StudentRepository;
 
 import java.util.Collection;
 
 @Service
 public class StudentService {
 
-    private final StudentsRepository studentsRepository;
+    private final StudentRepository studentRepository;
     private final FacultyRepository facultyRepository;
 
-    public StudentService(StudentsRepository studentsRepository, FacultyRepository facultyRepository) {
-        this.studentsRepository = studentsRepository;
+    public StudentService(StudentRepository studentRepository, FacultyRepository facultyRepository) {
+        this.studentRepository = studentRepository;
         this.facultyRepository = facultyRepository;
     }
 
     public Student createStudent(Student student) {
-        return studentsRepository.save(student);
+        return studentRepository.save(student);
     }
 
     public Student getStudent(Long id) {
-        return studentsRepository.findById(id).orElseThrow(StudentNotFoundException::new);
+        return studentRepository.findById(id).orElseThrow(StudentNotFoundException::new);
     }
 
     public Student editStudent(Long id, Student student) {
-        Student findedStudent = studentsRepository.findById(id).orElseThrow(StudentNotFoundException::new);
+        Student findedStudent = studentRepository.findById(id).orElseThrow(StudentNotFoundException::new);
         findedStudent.setName(student.getName());
         findedStudent.setAge(student.getAge());
-        return studentsRepository.save(findedStudent);
+        return studentRepository.save(findedStudent);
     }
 
     public Student deleteStudent(Long id) {
-        Student student = studentsRepository.findById(id).orElseThrow(StudentNotFoundException::new);
-        studentsRepository.delete(student);
+        Student student = studentRepository.findById(id).orElseThrow(StudentNotFoundException::new);
+        studentRepository.delete(student);
         return student;
     }
 
     public Collection<Student> getAllStudents() {
-        return studentsRepository.findAll();
+        return studentRepository.findAll();
+    }
+
+    public Collection<Student> getLastFiveStudents() {
+        return studentRepository.getLastFiveStudents();
+    }
+
+    public int getAllStudentsCount() {
+        return studentRepository.getAllStudentsCount();
     }
 
     public Collection<Student> getStudentsOfAge(int age) {
         if (age < 0) {
             throw new AgeLessThanZeroException();
         }
-        return studentsRepository.findAllByAge(age);
+        return studentRepository.findAllByAge(age);
+    }
+
+    public int getStudentsAvgAge() {
+        return studentRepository.getStudentsAvgAge();
     }
 
     public Collection<Student> getStudentsByAgeBetween(Integer min, Integer max) {
         if(min == null) {
-            return studentsRepository.getStudentsByAgeBetween(0, max);
+            return studentRepository.getStudentsByAgeBetween(0, max);
         }
         if(max == null) {
-            return studentsRepository.getStudentsByAgeBetween(min, 300);
+            return studentRepository.getStudentsByAgeBetween(min, 300);
         }
-        return studentsRepository.getStudentsByAgeBetween(min, max);
+        return studentRepository.getStudentsByAgeBetween(min, max);
     }
 
     public Collection<Student> getStudentsOfFaculty(Long facultyId) {

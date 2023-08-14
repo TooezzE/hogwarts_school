@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,7 +16,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.AvatarRepository;
 import ru.hogwarts.school.repositories.FacultyRepository;
-import ru.hogwarts.school.repositories.StudentsRepository;
+import ru.hogwarts.school.repositories.StudentRepository;
 import ru.hogwarts.school.services.AvatarService;
 import ru.hogwarts.school.services.FacultyService;
 import ru.hogwarts.school.services.StudentService;
@@ -40,7 +39,7 @@ public class FacultyControllerWebMvcTest {
     @MockBean
     private AvatarRepository avatarRepository;
     @MockBean
-    private StudentsRepository studentsRepository;
+    private StudentRepository studentRepository;
     @SpyBean
     private FacultyService facultyService;
     @SpyBean
@@ -289,7 +288,7 @@ public class FacultyControllerWebMvcTest {
 
         student.setFaculty(faculty);
 
-        when(studentsRepository.findById(1L)).thenReturn(Optional.of(student));
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/faculty/get-by-student/" + student.getId())

@@ -16,7 +16,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.AvatarRepository;
 import ru.hogwarts.school.repositories.FacultyRepository;
-import ru.hogwarts.school.repositories.StudentsRepository;
+import ru.hogwarts.school.repositories.StudentRepository;
 import ru.hogwarts.school.services.AvatarService;
 import ru.hogwarts.school.services.FacultyService;
 import ru.hogwarts.school.services.StudentService;
@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -36,7 +35,7 @@ public class StudentControllerWebMvcTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private StudentsRepository studentsRepository;
+    private StudentRepository studentRepository;
     @MockBean
     private FacultyRepository facultyRepository;
     @MockBean
@@ -69,8 +68,8 @@ public class StudentControllerWebMvcTest {
         student.setName(name);
         student.setAge(age);
 
-        when(studentsRepository.save(any(Student.class))).thenReturn(student);
-        when(studentsRepository.findById(any(Long.class))).thenReturn(Optional.of(student));
+        when(studentRepository.save(any(Student.class))).thenReturn(student);
+        when(studentRepository.findById(any(Long.class))).thenReturn(Optional.of(student));
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/student")
@@ -99,7 +98,7 @@ public class StudentControllerWebMvcTest {
         student.setName(name);
         student.setAge(age);
 
-        when(studentsRepository.findById(any(Long.class))).thenReturn(Optional.of(student));
+        when(studentRepository.findById(any(Long.class))).thenReturn(Optional.of(student));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/student/" + id)
@@ -128,8 +127,8 @@ public class StudentControllerWebMvcTest {
         student.setName(name);
         student.setAge(age);
 
-        when(studentsRepository.save(any(Student.class))).thenReturn(student);
-        when(studentsRepository.findById(any(Long.class))).thenReturn(Optional.of(student));
+        when(studentRepository.save(any(Student.class))).thenReturn(student);
+        when(studentRepository.findById(any(Long.class))).thenReturn(Optional.of(student));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/student/" + id)
@@ -158,7 +157,7 @@ public class StudentControllerWebMvcTest {
         student.setName(name);
         student.setAge(age);
 
-        when(studentsRepository.findById(any(Long.class))).thenReturn(Optional.of(student));
+        when(studentRepository.findById(any(Long.class))).thenReturn(Optional.of(student));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/student/" + id)
@@ -207,7 +206,7 @@ public class StudentControllerWebMvcTest {
 
         List<Student> students = Arrays.asList(student, student2, student3);
 
-        when(studentsRepository.findAll()).thenReturn(students);
+        when(studentRepository.findAll()).thenReturn(students);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/student/all")
@@ -259,7 +258,7 @@ public class StudentControllerWebMvcTest {
 
         List<Student> students13 = Arrays.asList(student, student3);
 
-        when(studentsRepository.findAllByAge(23)).thenReturn(students13);
+        when(studentRepository.findAllByAge(23)).thenReturn(students13);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/student/by-age/" + age)
@@ -290,7 +289,7 @@ public class StudentControllerWebMvcTest {
 
         List<Student> students23 = Arrays.asList(student2, student3);
 
-        when(studentsRepository.getStudentsByAgeBetween(22, 30)).thenReturn(students23);
+        when(studentRepository.getStudentsByAgeBetween(22, 30)).thenReturn(students23);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/student/age-between?min=22&max=30")

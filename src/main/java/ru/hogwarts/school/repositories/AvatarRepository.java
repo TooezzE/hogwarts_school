@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface AvatarRepository extends JpaRepository<Avatar, Long> {
-
     Optional<Avatar> findAvatarByStudentId(Long id);
 }
