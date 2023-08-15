@@ -34,7 +34,7 @@ public class AvatarService {
         this.avatarRepository = avatarRepository;
     }
 
-    public Collection<Avatar> getAllAvatars(Integer pageNumber, Integer pageSize) {
+    public Collection<Avatar> getAllAvatarsByPages(Integer pageNumber, Integer pageSize) {
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
 
         return avatarRepository.findAll(pageRequest).getContent();
@@ -72,7 +72,7 @@ public class AvatarService {
     private byte[] generateImageData(Path filePath) throws IOException {
         try (InputStream is = Files.newInputStream(filePath);
              BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+             ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
             BufferedImage image = ImageIO.read(bis);
 
             int height = image.getHeight() / (image.getWidth() / 100);
@@ -81,8 +81,8 @@ public class AvatarService {
             graphics.drawImage(image, 0, 0, 100, height, null);
             graphics.dispose();
 
-            ImageIO.write(preview, getExtension(filePath.getFileName().toString()), baos);
-            return baos.toByteArray();
+            ImageIO.write(preview, getExtension(filePath.getFileName().toString()), bos);
+            return bos.toByteArray();
         }
     }
 

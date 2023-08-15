@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collection;
 
 
@@ -40,23 +39,10 @@ public class AvatarController {
     }
 
     @GetMapping("/page-by-page")
-    public void getAllAvatars(@RequestParam("page") Integer pageNumber,
-                              @RequestParam("size") Integer pageSize,
-                              HttpServletResponse response) {
-        Collection<Avatar> avatars = avatarService.getAllAvatars(pageNumber, pageSize);
-        for (Avatar avatar : avatars) {
-            Path path = Path.of(avatar.getFilePath());
-            try(InputStream is = Files.newInputStream(path);
-                OutputStream os = response.getOutputStream())
-            {
-                response.setStatus(200);
-                response.setContentType(avatar.getMediaType());
-                response.setContentLength((int) avatar.getFileSize());
-                is.transferTo(os);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public Collection<Avatar> getAllAvatars(@RequestParam("page") Integer pageNumber,
+                                            @RequestParam("size") Integer pageSize,
+                                            HttpServletResponse response) {
+        return avatarService.getAllAvatarsByPages(pageNumber, pageSize);
     }
 
     @GetMapping(value = "{id}/avatar")
