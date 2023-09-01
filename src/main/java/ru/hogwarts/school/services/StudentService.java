@@ -12,6 +12,7 @@ import ru.hogwarts.school.repositories.FacultyRepository;
 import ru.hogwarts.school.repositories.StudentRepository;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Optional;
 
 @Service
@@ -96,6 +97,14 @@ public class StudentService {
         return studentRepository.getStudentsAvgAge();
     }
 
+    public int getStudentsAvgAge_2() {
+        logger.info("Was invoked method for get students average age №2");
+        return (int) studentRepository.findAll().stream()
+                .map(Student::getAge)
+                .mapToInt(a -> a)
+                .average().orElse(0);
+    }
+
     public Collection<Student> getStudentsByAgeBetween(Integer min, Integer max) {
         logger.info("Was invoked method for get students be age between " + min + " and " + max);
         if(min == null) {
@@ -118,5 +127,19 @@ public class StudentService {
             logger.error("There is not faculty with id = " + facultyId);
         }
         return studentsOfFaculty;
+    }
+
+    public Collection<String> getStudentsByNameLetter(String letter) {
+        logger.info("Was invoked method for get students whose name starts with \"" + letter.toUpperCase() + "\"");
+        if(!letter.matches("[a-zA-Z]+")) {
+            logger.error("Given \n" + letter + "\" is not a letter");
+            throw new IllegalArgumentException("It's not a letter");
+        }
+        return studentRepository.findAll().stream()
+                .map(Student::getName)
+                .filter(n -> n.startsWith(letter.toUpperCase()))
+                .map(String::toUpperCase)
+                .sorted(Comparator.reverseOrder())
+                .toList();
     }
 }

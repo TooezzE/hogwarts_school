@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.services.StudentService;
 
+import java.io.StringReader;
 import java.util.Collection;
 
 @RestController
@@ -66,6 +67,11 @@ public class StudentController {
         return ResponseEntity.ok().body(studentService.getStudentsAvgAge());
     }
 
+    @GetMapping("/avg-age-№2")
+    public ResponseEntity<Integer> getStudentsAvgAge_2() {
+        return ResponseEntity.ok().body(studentService.getStudentsAvgAge_2());
+    }
+
     @GetMapping("/age-between")
     public Collection<Student> getStudentsByAgeBetween(@RequestParam(required = false) Integer min,
                                                        @RequestParam(required = false) Integer max) {
@@ -75,6 +81,11 @@ public class StudentController {
     @GetMapping("/of-faculty/{facultyId}")
     public Collection<Student> getStudentsOfFaculty(@PathVariable Long facultyId) {
         return studentService.getStudentsOfFaculty(facultyId);
+    }
+
+    @GetMapping("/name-starts-with/{letter}")
+    public Collection<String> getStudentsByNameLetter(@PathVariable String letter) {
+        return studentService.getStudentsByNameLetter(letter);
     }
 }
 
