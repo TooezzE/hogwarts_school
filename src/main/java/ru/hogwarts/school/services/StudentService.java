@@ -92,14 +92,14 @@ public class StudentService {
         return studentRepository.findAllByAge(age);
     }
 
-    public int getStudentsAvgAge() {
+    public double getStudentsAvgAge() {
         logger.info("Was invoked method for get students average age");
         return studentRepository.getStudentsAvgAge();
     }
 
-    public int getStudentsAvgAge_2() {
+    public double getStudentsAvgAge_2() {
         logger.info("Was invoked method for get students average age №2");
-        return (int) studentRepository.findAll().stream()
+        return studentRepository.findAll().stream()
                 .map(Student::getAge)
                 .mapToInt(a -> a)
                 .average().orElse(0);
