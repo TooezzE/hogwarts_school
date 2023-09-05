@@ -13,6 +13,7 @@ import ru.hogwarts.school.repositories.StudentRepository;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,7 +21,8 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final FacultyRepository facultyRepository;
-    Logger logger = LoggerFactory.getLogger(StudentService.class);
+    private final Object flag = new Object();
+    private final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
     public StudentService(StudentRepository studentRepository, FacultyRepository facultyRepository) {
         this.studentRepository = studentRepository;
@@ -141,5 +143,43 @@ public class StudentService {
                 .map(String::toUpperCase)
                 .sorted(Comparator.reverseOrder())
                 .toList();
+    }
+
+    public void printNamesInConsole() {
+        List<Student> students = studentRepository.findAll();
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
+
+        new Thread(() -> {
+            System.out.println(students.get(2).getName());
+            System.out.println(students.get(3).getName());
+        }).start();
+
+        new Thread(() -> {
+            System.out.println(students.get(4).getName());
+            System.out.println(students.get(5).getName());
+        }).start();
+    }
+
+    public void printNamesInConsoleSynhronized() {
+        List<Student> students = studentRepository.findAll();
+        print(students.get(0));
+        print(students.get(1));
+
+        new Thread(() -> {
+            print(students.get(2));
+            print(students.get(3));
+        }).start();
+
+        new Thread(() -> {
+            print(students.get(4));
+            print(students.get(5));
+        }).start();
+    }
+    
+    private void print(Student student) {
+        synchronized (flag) {
+            System.out.println("id:" + student.getId() + " name: " + student.getName());
+        }
     }
 }
