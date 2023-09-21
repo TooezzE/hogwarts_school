@@ -37,6 +37,7 @@ public class AvatarService {
         this.avatarRepository = avatarRepository;
     }
 
+    // Get avatars divided on pages
     public Collection<Avatar> getAllAvatarsByPages(Integer pageNumber, Integer pageSize) {
         logger.info("Was invoked method for get all avatars by pages");
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
@@ -44,6 +45,7 @@ public class AvatarService {
         return avatarRepository.findAll(pageRequest).getContent();
     }
 
+    // Add avatar
     public void uploadAvatar(Long studentId, MultipartFile file) throws IOException {
         logger.info("Was invoked method for upload avatar");
         Student student = studentService.getStudent(studentId);
@@ -70,11 +72,13 @@ public class AvatarService {
         avatarRepository.save(avatar);
     }
 
+    // Find avatar
     public Avatar findAvatar(Long studentId) {
         logger.info("Was invoked method for find avatar");
         return avatarRepository.findAvatarByStudentId(studentId).orElse(new Avatar());
     }
 
+    // Generates image data
     private byte[] generateImageData(Path filePath) throws IOException {
         try (InputStream is = Files.newInputStream(filePath);
              BufferedInputStream bis = new BufferedInputStream(is, 1024);
@@ -92,6 +96,7 @@ public class AvatarService {
         }
     }
 
+    // Creates file extension
     private String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }

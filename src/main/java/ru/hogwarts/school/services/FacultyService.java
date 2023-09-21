@@ -24,11 +24,13 @@ public class FacultyService {
         this.studentRepository = studentRepository;
     }
 
+    // Create faculty
     public Faculty createFaculty(Faculty faculty) {
         logger.info("Was invoked method for create faculty");
         return facultyRepository.save(faculty);
     }
 
+    // Get faculty
     public Faculty getFaculty(Long id) {
         logger.info("Was invoked method for get faculty");
         Faculty faculty = null;
@@ -40,6 +42,7 @@ public class FacultyService {
         return faculty;
     }
 
+    // Edit faculty
     public Faculty editFaculty(Long id, Faculty faculty) {
         logger.info("Was invoked method for edit faculty");
         Faculty findedFaculty = null;
@@ -53,6 +56,7 @@ public class FacultyService {
         return facultyRepository.save(findedFaculty);
     }
 
+    // Delete faculty
     public Faculty deleteFaculty(Long id) {
         logger.info("Was invoked method for edit faculty");
         Faculty faculty = null;
@@ -65,21 +69,25 @@ public class FacultyService {
         return faculty;
     }
 
+    // Get all faculties
     public Collection<Faculty> getAll() {
         logger.info("Was invoked method for get all faculties");
         return facultyRepository.findAll();
     }
 
+    // Get faculties of color
     public Collection<Faculty> getFacultiesOfColor(String color) {
         logger.info("Was invoked method for get faculties of color " + color);
         return facultyRepository.findAllByColorIgnoreCase(color);
     }
 
+    // Get faculty by name
     public Faculty getFacultyByName(String name) {
         logger.info("Was invoked method for get faculty by name " + name);
         return facultyRepository.findFacultyByNameIgnoreCase(name);
     }
 
+    // Find faculty by student in
     public Faculty getFacultyByStudentId(Long studentId) {
         logger.info("Was invoked method for get faculty by student id " + studentId);
         Faculty faculty = null;
@@ -93,6 +101,7 @@ public class FacultyService {
         return faculty;
     }
 
+    // Get faculty with the longest name
     public String getTheLongestFacultyName() {
         logger.info("Was invoked method for get the longest faculty name");
         return facultyRepository.findAll().stream()

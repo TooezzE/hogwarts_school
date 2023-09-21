@@ -29,11 +29,13 @@ public class StudentService {
         this.facultyRepository = facultyRepository;
     }
 
+    // Create student
     public Student createStudent(Student student) {
         logger.info("Was invoked method for create student");
         return studentRepository.save(student);
     }
 
+    // Get student
     public Student getStudent(Long id) {
         logger.info("Was invoked method for get student");
         Student student = null;
@@ -45,6 +47,7 @@ public class StudentService {
         return student;
     }
 
+    // Edit student
     public Student editStudent(Long id, Student student) {
         logger.info("Was invoked method for edit student");
         Student findedStudent = null;
@@ -58,6 +61,7 @@ public class StudentService {
         return studentRepository.save(findedStudent);
     }
 
+    // Delete student
     public Student deleteStudent(Long id) {
         logger.info("Was invoked method for delete student");
         Student student = null;
@@ -70,21 +74,25 @@ public class StudentService {
         return student;
     }
 
+    // Get all students
     public Collection<Student> getAllStudents() {
         logger.info("Was invoked method for get all students");
         return studentRepository.findAll();
     }
 
+    // Get last 5 added students
     public Collection<Student> getLastFiveStudents() {
         logger.info("Was invoked method for get last 5 students");
         return studentRepository.getLastFiveStudents();
     }
 
+    // Get amount of students
     public int getAllStudentsCount() {
         logger.info("Was invoked method for get count of students");
         return studentRepository.getAllStudentsCount();
     }
 
+    // Get students of some age
     public Collection<Student> getStudentsOfAge(int age) {
         logger.info("Was invoked method for get students of age " + age);
         if (age < 0) {
@@ -94,11 +102,13 @@ public class StudentService {
         return studentRepository.findAllByAge(age);
     }
 
+    // Get average students age
     public double getStudentsAvgAge() {
         logger.info("Was invoked method for get students average age");
         return studentRepository.getStudentsAvgAge();
     }
 
+    // Get avg students age using stream
     public double getStudentsAvgAge_2() {
         logger.info("Was invoked method for get students average age №2");
         return studentRepository.findAll().stream()
@@ -107,6 +117,7 @@ public class StudentService {
                 .average().orElse(0);
     }
 
+    // Get students of age between some range
     public Collection<Student> getStudentsByAgeBetween(Integer min, Integer max) {
         logger.info("Was invoked method for get students be age between " + min + " and " + max);
         if(min == null) {
@@ -118,6 +129,7 @@ public class StudentService {
         return studentRepository.getStudentsByAgeBetween(min, max);
     }
 
+    // Get students of any faculty
     public Collection<Student> getStudentsOfFaculty(Long facultyId) {
         logger.info("Was invoked method for get students of faculty with id " + facultyId);
         Collection<Student> studentsOfFaculty = null;
@@ -131,10 +143,11 @@ public class StudentService {
         return studentsOfFaculty;
     }
 
+    // Get students which name starts with letter
     public Collection<String> getStudentsByNameLetter(String letter) {
         logger.info("Was invoked method for get students whose name starts with \"" + letter.toUpperCase() + "\"");
         if(!letter.matches("[a-zA-Z]+")) {
-            logger.error("Given \n" + letter + "\" is not a letter");
+            logger.error("Given symbol \n" + letter + "\" is not a letter");
             throw new IllegalArgumentException("It's not a letter");
         }
         return studentRepository.findAll().stream()
@@ -143,43 +156,5 @@ public class StudentService {
                 .map(String::toUpperCase)
                 .sorted(Comparator.reverseOrder())
                 .toList();
-    }
-
-    public void printNamesInConsole() {
-        List<Student> students = studentRepository.findAll();
-        System.out.println(students.get(0).getName());
-        System.out.println(students.get(1).getName());
-
-        new Thread(() -> {
-            System.out.println(students.get(2).getName());
-            System.out.println(students.get(3).getName());
-        }).start();
-
-        new Thread(() -> {
-            System.out.println(students.get(4).getName());
-            System.out.println(students.get(5).getName());
-        }).start();
-    }
-
-    public void printNamesInConsoleSynhronized() {
-        List<Student> students = studentRepository.findAll();
-        print(students.get(0));
-        print(students.get(1));
-
-        new Thread(() -> {
-            print(students.get(2));
-            print(students.get(3));
-        }).start();
-
-        new Thread(() -> {
-            print(students.get(4));
-            print(students.get(5));
-        }).start();
-    }
-    
-    private void print(Student student) {
-        synchronized (flag) {
-            System.out.println("id:" + student.getId() + " name: " + student.getName());
-        }
     }
 }
